@@ -49,7 +49,8 @@ export function MachineryView({ machinery, projectId }: MachineryViewProps) {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2,
     }).format(amount);
   };
 
@@ -57,7 +58,9 @@ export function MachineryView({ machinery, projectId }: MachineryViewProps) {
     const parts = [
       machine.type.toLowerCase(),
       machine.jcbSubtype?.toLowerCase().replace(/_/g, " "),
-      machine.type === "JCB" && machine.jcbPartType ? `${machine.jcbPartType.toLowerCase().replace(/_/g, " ")}` : null,
+      machine.type === "JCB" && machine.jcbPartType
+        ? `${machine.jcbPartType.toLowerCase().replace(/_/g, " ")}`
+        : null,
       machine.slmSubtype?.toLowerCase().replace(/_/g, " "),
     ].filter(Boolean);
     return parts.join(" - ");
@@ -66,7 +69,7 @@ export function MachineryView({ machinery, projectId }: MachineryViewProps) {
   const getMachineryUrl = (machine: Machinery) => {
     const parts = [];
     parts.push(machine.type.toLowerCase());
-    
+
     if (machine.type === "JCB") {
       if (machine.jcbSubtype) {
         parts.push("subtype", machine.jcbSubtype.toLowerCase());
@@ -77,7 +80,7 @@ export function MachineryView({ machinery, projectId }: MachineryViewProps) {
     } else if (machine.type === "SLM" && machine.slmSubtype) {
       parts.push("subtype", machine.slmSubtype.toLowerCase());
     }
-    
+
     return parts.join("_");
   };
 

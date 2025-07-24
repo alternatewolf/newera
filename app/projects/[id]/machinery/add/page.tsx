@@ -13,7 +13,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { MachineryType, JCBSubtype, SLMSubtype, JCBPartType } from "@prisma/client";
+import {
+  MachineryType,
+  JCBSubtype,
+  SLMSubtype,
+  JCBPartType,
+} from "@prisma/client";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -58,7 +63,8 @@ const slmSubtypeLabels: Record<SLMSubtype, string> = {
 
 export default function AddMachineryPage({ params }: AddMachineryPageProps) {
   const [selectedType, setSelectedType] = useState<MachineryType | null>(null);
-  const [selectedJCBSubtype, setSelectedJCBSubtype] = useState<JCBSubtype | null>(null);
+  const [selectedJCBSubtype, setSelectedJCBSubtype] =
+    useState<JCBSubtype | null>(null);
 
   return (
     <div className="p-4 sm:p-8">
@@ -101,7 +107,9 @@ export default function AddMachineryPage({ params }: AddMachineryPageProps) {
                 <Select
                   name="jcbSubtype"
                   required
-                  onValueChange={(value) => setSelectedJCBSubtype(value as JCBSubtype)}
+                  onValueChange={(value) =>
+                    setSelectedJCBSubtype(value as JCBSubtype)
+                  }
                 >
                   <SelectTrigger className="bg-white/[0.15]">
                     <SelectValue placeholder="Select JCB model" />
@@ -159,7 +167,7 @@ export default function AddMachineryPage({ params }: AddMachineryPageProps) {
                 id="hoursUsed"
                 name="hoursUsed"
                 type="number"
-                step="0.5"
+                step="any"
                 required
                 className="bg-white/[0.15]"
                 placeholder="Enter hours used"

@@ -1,14 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { DateRangeFilter } from '@/components/date-range-filter';
-import { formatDate } from '@/lib/utils';
-import { History } from 'lucide-react';
-import {
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from '@/components/ui/card';
+import { useState } from "react";
+import { DateRangeFilter } from "@/components/date-range-filter";
+import { formatDate } from "@/lib/utils";
+import { History } from "lucide-react";
+import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 interface UsageHistoryProps {
   projectId: string;
@@ -27,7 +23,8 @@ export default function UsageHistory({
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2,
     }).format(amount);
   };
 
@@ -36,10 +33,10 @@ export default function UsageHistory({
     to: Date | undefined;
   }) => {
     const params = new URLSearchParams();
-    params.append('projectId', projectId);
-    params.append('machineryType', machineryType);
-    if (range.from) params.append('fromDate', range.from.toISOString());
-    if (range.to) params.append('toDate', range.to.toISOString());
+    params.append("projectId", projectId);
+    params.append("machineryType", machineryType);
+    if (range.from) params.append("fromDate", range.from.toISOString());
+    if (range.to) params.append("toDate", range.to.toISOString());
 
     const response = await fetch(`/api/machinery/usage?${params.toString()}`);
     const newData = await response.json();
@@ -82,8 +79,12 @@ export default function UsageHistory({
                   key={entry.id}
                   className="border-b border-[rgba(0,0,0,0.08)] hover:bg-white/[0.15]"
                 >
-                  <td className="py-4 px-6 text-left">{formatDate(entry.date)}</td>
-                  <td className="py-4 px-6 text-center">{entry.hoursUsed} hrs</td>
+                  <td className="py-4 px-6 text-left">
+                    {formatDate(entry.date)}
+                  </td>
+                  <td className="py-4 px-6 text-center">
+                    {entry.hoursUsed} hrs
+                  </td>
                   <td className="py-4 px-6 text-center">
                     {formatCurrency(entry.hourlyRate)}/hr
                   </td>

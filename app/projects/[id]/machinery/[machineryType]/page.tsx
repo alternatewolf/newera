@@ -20,7 +20,12 @@ import {
   Timer,
 } from "lucide-react";
 import cn from "classnames";
-import { MachineryType, JCBSubtype, SLMSubtype, JCBPartType } from "@prisma/client";
+import {
+  MachineryType,
+  JCBSubtype,
+  SLMSubtype,
+  JCBPartType,
+} from "@prisma/client";
 import dynamic from "next/dynamic";
 
 interface MachineryPageProps {
@@ -50,7 +55,15 @@ async function getMachineryDetails(projectId: string, machineryType: string) {
     // Find JCB subtype and part type
     for (let i = 1; i < parts.length; i++) {
       if (parts[i] === "SUBTYPE" && parts[i + 1]) {
-        jcbSubtype = parts[i + 1] as JCBSubtype;
+        // Fix: Find the correct enum value for JCBSubtype
+        const possibleSubtype = parts[i + 1];
+        // Try to match to a valid JCBSubtype enum value
+        const validSubtype = Object.values(JCBSubtype).find(
+          (enumVal) => enumVal.toUpperCase() === possibleSubtype.toUpperCase()
+        );
+        if (validSubtype) {
+          jcbSubtype = validSubtype as JCBSubtype;
+        }
         i++; // Skip the next part as we've used it
       } else if (parts[i] === "PARTTYPE" && parts[i + 1]) {
         jcbPartType = parts[i + 1] as JCBPartType;
@@ -61,7 +74,13 @@ async function getMachineryDetails(projectId: string, machineryType: string) {
     // Find SLM subtype
     const subtypeIndex = parts.indexOf("SUBTYPE");
     if (subtypeIndex !== -1 && parts[subtypeIndex + 1]) {
-      slmSubtype = parts[subtypeIndex + 1] as SLMSubtype;
+      const possibleSubtype = parts[subtypeIndex + 1];
+      const validSubtype = Object.values(SLMSubtype).find(
+        (enumVal) => enumVal.toUpperCase() === possibleSubtype.toUpperCase()
+      );
+      if (validSubtype) {
+        slmSubtype = validSubtype as SLMSubtype;
+      }
     }
   }
 
@@ -145,7 +164,8 @@ export default async function MachineryPage({ params }: MachineryPageProps) {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2,
     }).format(amount);
   };
 
