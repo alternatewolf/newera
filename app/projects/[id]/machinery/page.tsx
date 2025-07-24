@@ -181,7 +181,7 @@ export default async function MachineryPage({ params }: MachineryPageProps) {
               <div>
                 <p className="text-sm font-medium text-gray-500">Total Hours</p>
                 <p className="text-2xl font-semibold">
-                  {Math.round(project.machineryStats.totalHours)}
+                  {project.machineryStats.totalHours}
                 </p>
               </div>
             </div>
